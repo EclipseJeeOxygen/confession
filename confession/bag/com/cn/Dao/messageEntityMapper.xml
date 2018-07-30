@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.Dao.MessageDao">
+
+	<insert id="add">
+		insert into
+		message(name,userNameOne,leaveMessage,time,userId,commentNum)
+		value(#{name},#{userNameOne},#{leaveMessage},now(),#{userId},0)
+	</insert>
+
+	<select id="select" resultType="com.cn.Entity.MessageEntity">
+		SELECT
+		a.id AS "id",
+		a.name AS
+		"name",
+		a.userNameOne AS "userNameOne",
+		a.leaveMessage AS "leaveMessage",
+		DATE_FORMAT(a.time,'%Y-%m-%d') AS "time",
+		a.commentNum AS "commentNum"
+		FROM message a
+		order by id desc;
+	</select>
+	<select id="checkHot" resultType="com.cn.Entity.MessageEntity">
+		SELECT
+		a.id AS "id",
+		a.name AS
+		"name",
+		a.userNameOne AS "userNameOne",
+		a.leaveMessage AS "leaveMessage",
+		DATE_FORMAT(a.time,'%Y-%m-%d') AS "time",
+		a.commentNum AS "commentNum"
+		FROM message a
+		order by commentNum desc limit 0,20;
+	</select>
+	<update id="updateCommentNum" parameterType="com.cn.Entity.MessageEntity">
+		UPDATE
+		message
+		set
+		commentNum = commentNum+1
+		WHERE id=#{id}
+	</update>
+	<delete id="deleteMessage" parameterType="com.cn.Entity.MessageEntity">
+		DELETE
+		FROM
+		message
+		WHERE
+		id=#{id}
+	</delete>
+</mapper>
